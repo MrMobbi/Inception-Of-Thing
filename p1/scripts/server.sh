@@ -5,7 +5,7 @@ set -euxo pipefail
 SERVER_IP="${1}"
 
 # install k3s
-curl -sFL https://get.k3s.io | INSTALL_K3S_EXEC="server \
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server \
 	--node-ip ${SERVER_IP} \
 	--tls-san ${SERVER_IP}" sh -
 
