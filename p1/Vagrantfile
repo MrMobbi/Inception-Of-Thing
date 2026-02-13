@@ -1,0 +1,34 @@
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "generic/ubuntu2204"
+
+  config.vm.provider :libvirt do |libvirt|
+    libvirt.memory = 1024
+    libvirt.cpus = 1
+  end
+
+  config.vm.define "server" do |node|
+    node.vm.hostname = "mjulliatS"
+    node.vm.network "private_network",
+      ip: "192.168.56.110",
+      libvirt__network_name: "vagrant-libvirt"
+
+    node.vm.provision "shell", path: "scripts/common.sh"
+    node.vm.provision "shell", path: "scripts/server.sh", args: ["192.168.56.110"]
+  end
+
+  config.vm.define "worker" do |node|
+    node.vm.hostname = "mjulliatSW"
+    node.vm.network "private_network",
+      ip: "192.168.56.111",
+      libvirt__network_name: "vagrant-libvirt"
+
+    node.vm.provision "shell", 
+      path: "scripts/common.sh",
+      name: "Intall common"
+    node.vm.provision "shell", 
+      path: "scripts/server.sh", 
+      args: ["192.168.56.110", "192.168.56.111"],
+      name: "install and configure k3s worker node"
+  end
+end
