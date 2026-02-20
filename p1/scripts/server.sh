@@ -38,20 +38,21 @@ done
 
 echo "Kubernetes API is ready!"
 
-if [ -f "/vagrant/kubeconfig" ] ; then
-	echo "kubeconfig already exposed"
-else
-	echo "Exporting kubeconfig..."
-	sudo cp /etc/rancher/k3s/k3s.yaml /tmp/kubeconfig
-	sudo chown vagrant:vagrant /tmp/kubeconfig
+echo "=== Waiting for worker node to join ==="
+MAX_RETRIES=10
+COUNT=0
 
-	if [ -d "/vagrant" ]; then
-		cp /tmp/kubeconfig /vagrant/kubeconfig
-		echo "kubeconfig copied to /vagrant/kubeconfig"
-	else
-		echo "/vagrant folder not found, kubeconfig left in /tmp/kubeconfig"
-	fi
-fi
+until [ "$($K3S_BIN kubectl get nodes --no-headers | wc -l)" -eq 2 ]; do
+    COUNT=$((COUNT+1))
+    if [ "$COUNT" -ge "$MAX_RETRIES" ]; then
+        echo "Worker node not ready after $MAX_RETRIES attempts. Exiting."
+        exit 1
+    fi
+    echo "Waiting for worker node to joins... attempt $COUNT/$MAX_RETRIES"
+    sleep 5
+done
+
+$K3S_BIN kubectl label node mjulliatsw node-role.kubernetes.io/worker=worker
 
 echo "=== k3s server installation complete ==="
 $K3S_BIN kubectl get nodes

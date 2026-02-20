@@ -1,28 +1,19 @@
-#!/usr/bin/env bash
-set -euxo pipefail
+#!/bin/bash
+set -e
 
-SERVER_IP="${1}"
-WORKER_IP="${2}"
+SERVER_IP=$1
+TOKEN=$2
 
-# Wait for server to write token
-for i in $(seq 1 30); do
-  if [ -s /var/lib/rancher/k3s/server/node-token ]; then
-    break
-  fi
-  echo "Waiting for /vagrant/k3s-node-token... ($i/30)"
-  sleep 2
-done
+echo "=== Starting k3s worker installation ==="
+echo "Server IP: ${SERVER_IP}"
 
-  if [ -s /var/lib/rancher/k3s/server/node-token ]; then
-  echo "ERROR: token not found. Server provisioning may have failed."
-  exit 1
+# Install k3s agent if not already installed
+if systemctl is-active --quiet k3s-agent; then
+    echo "k3s agent is already installed. Skipping."
+else
+    echo "=== Installing k3s worker ==="
+    curl -sfL https://get.k3s.io | K3S_URL="https://${SERVER_IP}:6443" \
+        K3S_TOKEN="${TOKEN}" sh -s - agent 1>/dev/null
 fi
 
-TOKEN="$(cat /vagrant/k3s-node-token)"
-
-# Install k3s
-curl -sfL https://get.k3s.io | \
-  K3S_URL="https://${SERVER_IP}:6443" \
-  K3S_TOKEN="${TOKEN}" \
-  INSTALL_K3S_EXEC="agent --node-ip ${WORKER_IP}" sh -
-
+echo "=== k3s worker installation complete ==="
