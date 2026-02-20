@@ -26,7 +26,7 @@ K3S_BIN=/usr/local/bin/k3s
 MAX_RETRIES=5
 COUNT=0
 
-until $K3S_BIN kubectl get nodes 1>/dev/null ; do
+until [ "$($K3S_BIN kubectl get nodes -o jsonpath='{.items[0].status.conditions[?(@.type=="Ready")].status}')" == "True" ]; do
     COUNT=$((COUNT+1))
     if [ "$COUNT" -ge "$MAX_RETRIES" ]; then
         echo "Kubernetes API did not become ready after $MAX_RETRIES attempts. Exiting."
