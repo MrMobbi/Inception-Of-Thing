@@ -1,6 +1,6 @@
 
-PROJECT_DIR	:= p1
-VAGRANT		:= cd $(PROJECT_DIR) && vagrant
+PR		?= p1
+VAGRANT	:= cd $(PR) && vagrant
 
 up:
 	$(VAGRANT) up --provider=libvirt
@@ -26,10 +26,8 @@ halt:
 destroy:
 	$(VAGRANT) destroy -f
 
-clean: destroy
-	@echo "Clean complete."
 
-re: clean up
+re: destroy up
 
 status:
 	$(VAGRANT) status
