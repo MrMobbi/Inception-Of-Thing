@@ -5,15 +5,15 @@ SERVER_IP="${1}"
 WORKER_IP="${2}"
 
 # Wait for server to write token
-for i in $(seq 1 60); do
-  if [ -s /vagrant/k3s-node-token ]; then
+for i in $(seq 1 30); do
+  if [ -s /var/lib/rancher/k3s/server/node-token ]; then
     break
   fi
-  echo "Waiting for /vagrant/k3s-node-token... ($i/60)"
+  echo "Waiting for /vagrant/k3s-node-token... ($i/30)"
   sleep 2
 done
 
-if [ ! -s /vagrant/k3s-node-token ]; then
+  if [ -s /var/lib/rancher/k3s/server/node-token ]; then
   echo "ERROR: token not found. Server provisioning may have failed."
   exit 1
 fi

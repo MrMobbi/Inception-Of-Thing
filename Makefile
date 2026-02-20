@@ -1,29 +1,50 @@
 
-GO_P1 = cd p1
-
-all: up
+PROJECT_DIR	:= p1
+VAGRANT		:= cd $(PROJECT_DIR) && vagrant
 
 up:
-	${GO_P1} && vagrant up --provider=libvirt
+	$(VAGRANT) up --provider=libvirt
 
-up-debug:
-	${GO_P1} && vagrant up --provider=libvirt --debug
+provision:
+	$(VAGRANT) provision
 
-stop:
-	${GO_P1} && vagrant halt
-	${GO_P1} && vagrant destroy
+prov-server:
+	$(VAGRANT) provision server
 
-clean:
-	${GO_P1} && vagrant destroy -f || true 
-	${GO_P1} && rm -rf .vagrant
+prov-worker:
+	$(VAGRANT) provision worker
 
-re: clean all
+rl:
+	$(VAGRANT) reload
 
-st:
-	${GO_P1} && vagrant status
+rl-provision:
+	$(VAGRANT) reload --provision
 
-ssh-1:
-	${GO_P1} && vagrant ssh server
+halt:
+	$(VAGRANT) halt
 
-ssh-2:
-	${GO_P1} && vagrant ssh worker
+destroy:
+	$(VAGRANT) destroy -f
+
+clean: destroy
+	@echo "Clean complete."
+
+re: clean up
+
+status:
+	$(VAGRANT) status
+
+ssh-server:
+	$(VAGRANT) ssh server
+
+ssh-worker:
+	$(VAGRANT) ssh worker
+
+logs-server:
+	$(VAGRANT) ssh server -c "sudo journalctl -u k3s -f"
+
+logs-worker:
+	$(VAGRANT) ssh worker -c "sudo journalctl -u k3s-agent -f"
+
+.PHONY: up provision reload halt destroy clean re status \
+        ssh-server ssh-worker logs-server logs-worker
