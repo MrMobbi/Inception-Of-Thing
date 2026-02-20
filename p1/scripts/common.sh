@@ -23,4 +23,8 @@ echo "=== Install Vim ==="
 sudo dnf install -y -qq vim 1>/dev/null
 echo "Done."
 
+echo "=== Install Net Tools ==="
+sudo dnf install -y -qq net-tools 1>/dev/null
+echo "Done."
+
 echo "=== Common Script Done ==="
