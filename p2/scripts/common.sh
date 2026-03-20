@@ -27,4 +27,14 @@ echo "=== Install Net Tools ==="
 sudo dnf install -y -qq net-tools 1>/dev/null
 echo "Done."
 
+echo "=== Install k9s Tools ==="
+if test -f k9s_linux_amd64.rpm; then
+    echo "k9s already installed"
+else
+	curl -LO https://github.com/derailed/k9s/releases/latest/download/k9s_linux_amd64.rpm
+	sudo dnf install -y -qq ./k9s_linux_amd64.rpm 1>/dev/null
+fi
+echo "Done."
+
+
 echo "=== Common Script Done ==="

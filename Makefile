@@ -1,5 +1,5 @@
 
-PR		?= p1
+PR		?= p2
 VAGRANT	:= cd $(PR) && vagrant
 
 up:

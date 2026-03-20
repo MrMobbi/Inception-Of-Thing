@@ -36,6 +36,20 @@ done
 
 echo "Kubernetes API is ready!"
 
+echo "=== k3s Deplyoing application ==="
+$K3S_BIN kubectl apply -f /home/vagrant/k8s-configs/app1.yaml
+$K3S_BIN kubectl apply -f /home/vagrant/k8s-configs/app2.yaml
+$K3S_BIN kubectl apply -f /home/vagrant/k8s-configs/app3.yaml
+$K3S_BIN kubectl apply -f /home/vagrant/k8s-configs/ingress.yaml
+echo "Done."
+
 echo "=== k3s server installation complete ==="
 $K3S_BIN kubectl get nodes
+$K3S_BIN kubectl get all
+echo "Done."
+
+echo "=== k9s kubeconfig settings ==="
+mkdir -p ~/.kube
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+sudo chown $(id -u):$(id -g) ~/.kube/config
 echo "Done."
