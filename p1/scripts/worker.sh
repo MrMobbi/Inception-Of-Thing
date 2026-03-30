@@ -16,14 +16,4 @@ else
         K3S_TOKEN="${TOKEN}" sh -s - agent 1>/dev/null
 fi
 
-echo "=== k3s server installation complete ==="
-$K3S_BIN kubectl get nodes
-$K3S_BIN kubectl get all
-echo "Done."
-
-echo "=== k9s kubeconfig settings ==="
-sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
-sudo chown $(id -u):$(id -g) ~/.kube/config
-echo "Done."
-
 echo "=== k3s worker installation complete ==="

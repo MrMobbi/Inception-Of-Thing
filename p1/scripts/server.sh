@@ -56,10 +56,6 @@ $K3S_BIN kubectl label node mjulliatsw node-role.kubernetes.io/worker=worker
 
 echo "=== k3s server installation complete ==="
 $K3S_BIN kubectl get nodes
-echo "Done."
-
-echo "=== k3s server installation complete ==="
-$K3S_BIN kubectl get nodes
 $K3S_BIN kubectl get all
 echo "Done."
 
