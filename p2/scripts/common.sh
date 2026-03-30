@@ -34,7 +34,7 @@ else
 	curl -LO https://github.com/derailed/k9s/releases/latest/download/k9s_linux_amd64.rpm
 	sudo dnf install -y -qq ./k9s_linux_amd64.rpm 1>/dev/null
 fi
+mkdir -p ~/.kube
 echo "Done."
-
 
 echo "=== Common Script Done ==="

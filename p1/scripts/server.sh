@@ -57,3 +57,13 @@ $K3S_BIN kubectl label node mjulliatsw node-role.kubernetes.io/worker=worker
 echo "=== k3s server installation complete ==="
 $K3S_BIN kubectl get nodes
 echo "Done."
+
+echo "=== k3s server installation complete ==="
+$K3S_BIN kubectl get nodes
+$K3S_BIN kubectl get all
+echo "Done."
+
+echo "=== k9s kubeconfig settings ==="
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+sudo chown $(id -u):$(id -g) ~/.kube/config
+echo "Done."
