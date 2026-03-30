@@ -1,5 +1,5 @@
 
-PR		?= p2
+PR		?= p1
 VAGRANT	:= cd $(PR) && vagrant
 
 up:
@@ -27,7 +27,9 @@ destroy:
 	$(VAGRANT) destroy -f
 
 
-re: destroy up
+re: rl provision
+
+rre: destroy up
 
 status:
 	$(VAGRANT) status
