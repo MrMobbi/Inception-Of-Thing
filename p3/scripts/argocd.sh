@@ -6,12 +6,7 @@ GREEN='\e[32m'
 BLUE='\e[34m'
 RESET='\e[0m'
 
-#set -e
-
-echo -e "${BLUE}=== Creation of the namespace ===${RESET}"
-kubectl create namespace argocd
-kubectl create namespace dev
-echo -e "${GREEN}Done.${RESET}"
+set -e
 
 echo -e "${BLUE}=== Generating secret and ssl ===${RESET}"
 # creating tls to access argocs with https
@@ -46,5 +41,5 @@ kubectl patch configmap argocd-cmd-params-cm -n argocd \
   --type merge \
   -p '{"data":{"server.insecure":"true"}}'
 
-kubectl apply -f config/argocd_ingress.yaml
+kubectl apply -f argocd/argocd_ingress.yaml
 echo -e "${GREEN}Done.${RESET}"
