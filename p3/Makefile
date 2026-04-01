@@ -70,9 +70,11 @@ curl-argocd:
 	curl -H "Host: argocd.local" http://localhost:8080
 
 git:
-	git add .
-	git commit -m "$(m)"
-	git push
+	@git add .
+	@git diff --cached --quiet || git commit -m "$(m)"
+	@git push
+
+m ?= update
 
 help:
 	@printf "================= HELP =================\n\n"
@@ -92,7 +94,8 @@ help:
 	@printf "  %-15s %s\n" "get-ns"         "List namespaces"
 	@printf "  %-15s %s\n" "get-argocd"    "Get ArgoCD resources"
 	@printf "  %-15s %s\n" "get-config"    "Export kubeconfig"
-	@printf "  %-15s %s\n\n" "get-argocd-pwd"  "Get ArgoCD admin password"
+	@printf "  %-15s %s\n" "get-argocd-pwd"  "Get ArgoCD admin password"
+	@printf "  %-15s %s\n\n" "git"  "Push last change to the repo"
 
 	@printf "Cluster control:\n"
 	@printf "  %-15s %s\n" "start"          "Start cluster"
@@ -121,4 +124,5 @@ help:
 		re \
 		start \
 		stop \
-		curl-argocd
+		curl-argocd \
+		git
