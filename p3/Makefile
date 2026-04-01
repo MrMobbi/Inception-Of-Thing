@@ -13,15 +13,15 @@ define msg
 	@printf	"#######################$(RESET)\n"
 endef
 
-all: create
+all: install create
 
 create:
 	$(call msg, $(GREEN),Building project)
 	k3d cluster create inception-of-things -p 8080:80@loadbalancer
 	k3d kubeconfig get inception-of-things > config/config
-	@$(MAKE) install
+	@$(MAKE)config-argocd
 
-install:
+congig-argocd:
 	$(call msg, $(GREEN),Configurating cluster)
 	bash scripts/cluster_config.sh
 
@@ -46,10 +46,25 @@ clean:
 
 re: clean create
 
+start:
+	k3d cluster start inception-of-things
 
-.PHONY: create \
+stop:
+	k3d cluster stop inception-of-things
+
+curl-argocd:
+	curl -H "Host: argocd.local" http://localhost:8080
+
+
+.PHONY: all \
+		create \
+		config-argocd \
 		get-ns \
 		get-argocd \
 		get-config \
+		get-argocd-pwd \
 		clean \
-		re
+		re \
+		start \
+		stop \
+		curl-argocd
