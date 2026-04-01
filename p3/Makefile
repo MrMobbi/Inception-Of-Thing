@@ -1,0 +1,15 @@
+
+all: create
+
+create:
+	k3d cluster create inception-of-things
+
+get-config:
+	k3d kubeconfig get inception-of-things > ~/.kube/config
+
+destroy:
+	k3d cluster delete inception-of-things
+
+re: destroy create
+
+.PHONY: create get-config 
