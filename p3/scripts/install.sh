@@ -48,3 +48,11 @@ else
 	apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 fi
 echo -e "${GREEN}Done.${RESET}"
+
+echo -e "${BLUE}=== Install openssl framwork ===${RESET}"
+if test -f /usr/bin/openssl; then
+	echo -e "${GREEN}Already installed${RESET}"
+else
+	apt install openssl 1>/dev/null
+fi
+echo -e "${GREEN}Done.${RESET}"
