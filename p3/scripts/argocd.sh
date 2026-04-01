@@ -6,7 +6,7 @@ GREEN='\e[32m'
 BLUE='\e[34m'
 RESET='\e[0m'
 
-set -e
+#set -e
 
 echo -e "${BLUE}=== Generating secret and ssl ===${RESET}"
 # creating tls to access argocs with https

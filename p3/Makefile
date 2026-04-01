@@ -13,7 +13,7 @@ define msg
 	@printf	"#######################$(RESET)\n"
 endef
 
-all: install create build
+all: install create build 
 
 install:
 	$(call msg, $(GREEN),Installing requirement)
@@ -32,7 +32,7 @@ config-common:
 
 config-argocd:
 	$(call msg, $(GREEN),Building argoCD)
-	bash scripts/argocd.sh.sh
+	bash scripts/argocd.sh
 
 config-app:
 	$(call msg, $(GREEN),Building app)
@@ -48,7 +48,8 @@ get-argocd:
 get-config:
 	k3d kubeconfig get inception-of-things > ~/.kube/config
 
-get-argo-pwd:
+get-argocd-pwd:
+	@printf	"Admin password: \n"
 	@kubectl -n argocd get secret argocd-initial-admin-secret \
 		-o jsonpath="{.data.password}" | base64 -d; echo
 
@@ -57,7 +58,7 @@ clean:
 	k3d cluster delete inception-of-things
 	rm config/config
 
-re: clean create
+re: clean all
 
 start:
 	k3d cluster start inception-of-things
@@ -67,6 +68,11 @@ stop:
 
 curl-argocd:
 	curl -H "Host: argocd.local" http://localhost:8080
+
+git:
+	git add .
+	git commit -m "$(m)"
+	git push
 
 help:
 	@printf "================= HELP =================\n\n"
@@ -86,7 +92,7 @@ help:
 	@printf "  %-15s %s\n" "get-ns"         "List namespaces"
 	@printf "  %-15s %s\n" "get-argocd"    "Get ArgoCD resources"
 	@printf "  %-15s %s\n" "get-config"    "Export kubeconfig"
-	@printf "  %-15s %s\n\n" "get-argo-pwd"  "Get ArgoCD admin password"
+	@printf "  %-15s %s\n\n" "get-argocd-pwd"  "Get ArgoCD admin password"
 
 	@printf "Cluster control:\n"
 	@printf "  %-15s %s\n" "start"          "Start cluster"
@@ -110,7 +116,7 @@ help:
 		get-ns \
 		get-argocd \
 		get-config \
-		get-argo-pwd \
+		get-argocd-pwd \
 		clean \
 		re \
 		start \
