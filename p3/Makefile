@@ -36,7 +36,7 @@ get-config:
 	k3d kubeconfig get inception-of-things > ~/.kube/config
 
 get-argo-pwd:
-	kubectl -n argocd get secret argocd-initial-admin-secret \
+	@kubectl -n argocd get secret argocd-initial-admin-secret \
 		-o jsonpath="{.data.password}" | base64 -d; echo
 
 clean:
