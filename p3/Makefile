@@ -24,17 +24,17 @@ create:
 	k3d cluster create inception-of-things -p 8080:80@loadbalancer
 	k3d kubeconfig get inception-of-things > config/config
 
-build: config-common config-app config-argocd 
+build: build-common build-app build-argocd 
 
-config-common:
+build-common:
 	$(call msg, $(GREEN),Building default cluster)
 	bash scripts/common.sh
 
-config-argocd:
+build-argocd:
 	$(call msg, $(GREEN),Building argoCD)
 	bash scripts/argocd.sh
 
-config-app:
+build-app:
 	$(call msg, $(GREEN),Building app)
 	bash scripts/app.sh
 
@@ -44,6 +44,10 @@ get-ns:
 get-argocd:
 	kubectl get all -n argocd
 	kubectl get ingress -n argocd
+
+get-app:
+	kubectl get all -n dev
+	kubectl get ingress -n dev
 
 get-config:
 	k3d kubeconfig get inception-of-things > ~/.kube/config
@@ -69,6 +73,9 @@ stop:
 curl-argocd:
 	curl -H "Host: argocd.local" http://localhost:8080
 
+curl-app:
+	curl -H "Host: app.local" http://localhost:8080
+
 git:
 	@git add .
 	@git diff --cached --quiet || git commit -m "$(m)"
@@ -80,31 +87,33 @@ help:
 	@printf "================= HELP =================\n\n"
 
 	@printf "Main commands:\n"
-	@printf "  %-15s %s\n" "all"            "Run full setup"
-	@printf "  %-15s %s\n" "install"        "Install requirements"
-	@printf "  %-15s %s\n" "create"         "Create k3d cluster"
-	@printf "  %-15s %s\n\n" "build"          "Configure cluster"
+	@printf "  %-15s %s\n" "all"			"Run full setup"
+	@printf "  %-15s %s\n" "install"		"Install requirements"
+	@printf "  %-15s %s\n" "create"			"Create k3d cluster"
+	@printf "  %-15s %s\n\n" "build"		"Configure cluster"
 
 	@printf "Configuration:\n"
-	@printf "  %-15s %s\n" "config-common"  "Configure default components"
-	@printf "  %-15s %s\n" "config-argocd" "Configure ArgoCD"
-	@printf "  %-15s %s\n\n" "config-app"    "Deploy application"
+	@printf "  %-15s %s\n" "config-common"	"Configure default components"
+	@printf "  %-15s %s\n" "config-argocd"	"Configure ArgoCD"
+	@printf "  %-15s %s\n\n" "config-app"	"Deploy application"
 
 	@printf "Utilities:\n"
-	@printf "  %-15s %s\n" "get-ns"         "List namespaces"
-	@printf "  %-15s %s\n" "get-argocd"    "Get ArgoCD resources"
-	@printf "  %-15s %s\n" "get-config"    "Export kubeconfig"
-	@printf "  %-15s %s\n" "get-argocd-pwd"  "Get ArgoCD admin password"
-	@printf "  %-15s %s\n\n" "git"  "Push last change to the repo"
+	@printf "  %-15s %s\n" "get-ns"			"List namespaces"
+	@printf "  %-15s %s\n" "get-argocd"		"Get ArgoCD resources"
+	@printf "  %-15s %s\n" "get-app"		"Get Dev resources"
+	@printf "  %-15s %s\n" "get-config"		"Export kubeconfig"
+	@printf "  %-15s %s\n" "get-argocd-pwd"	"Get ArgoCD admin password"
+	@printf "  %-15s %s\n\n" "git"			"Push last change to the repo"
 
 	@printf "Cluster control:\n"
-	@printf "  %-15s %s\n" "start"          "Start cluster"
-	@printf "  %-15s %s\n" "stop"           "Stop cluster"
-	@printf "  %-15s %s\n" "clean"          "Delete cluster and config"
-	@printf "  %-15s %s\n\n" "re"             "Recreate cluster"
+	@printf "  %-15s %s\n" "start"			"Start cluster"
+	@printf "  %-15s %s\n" "stop"			"Stop cluster"
+	@printf "  %-15s %s\n" "clean"			"Delete cluster and config"
+	@printf "  %-15s %s\n\n" "re"			"Recreate cluster"
 
 	@printf "Testing:\n"
-	@printf "  %-15s %s\n\n" "curl-argocd"   "Test ArgoCD ingress"
+	@printf "  %-15s %s\n\n" "curl-argocd"	"Test ArgoCD ingress"
+	@printf "  %-15s %s\n\n" "curl-app"		"Test app ingress"
 
 	@printf "========================================\n"
 
@@ -113,11 +122,12 @@ help:
 		install \
 		create \
 		build \
-		config-common \
-		config-argocd \
-		config-app \
+		build-common \
+		build-argocd \
+		build-app \
 		get-ns \
 		get-argocd \
+		get-app \
 		get-config \
 		get-argocd-pwd \
 		clean \
@@ -125,4 +135,5 @@ help:
 		start \
 		stop \
 		curl-argocd \
+		curl-app \
 		git

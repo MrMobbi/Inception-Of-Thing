@@ -8,6 +8,10 @@ RESET='\e[0m'
 
 #set -e
 
+echo -e "${GREEN}#############"
+echo -e "Building ArgoCD"
+echo -e "${GREEN}#############${RESET}"
+
 echo -e "${BLUE}=== Generating secret and ssl ===${RESET}"
 # creating tls to access argocs with https
 if [ ! -d secret ];then
