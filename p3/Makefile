@@ -24,7 +24,7 @@ create:
 	k3d cluster create inception-of-things -p 8080:80@loadbalancer
 	k3d kubeconfig get inception-of-things > config/config
 
-build: build-common build-app build-argocd 
+build: build-common build-argocd 
 
 build-common:
 	$(call msg, $(GREEN),Building default cluster)

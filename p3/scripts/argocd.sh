@@ -45,5 +45,6 @@ kubectl patch configmap argocd-cmd-params-cm -n argocd \
   --type merge \
   -p '{"data":{"server.insecure":"true"}}'
 
-kubectl apply -f argocd/argocd_ingress.yaml
+kubectl apply -f argocd/ingress.yaml
+kubectl apply -f argocd/application.yaml
 echo -e "${GREEN}Done.${RESET}"
