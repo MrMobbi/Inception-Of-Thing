@@ -29,8 +29,8 @@ fclean:
 	sudo virsh -c qemu:///system destroy p1_worker 2>/dev/null || true
 	sudo virsh -c qemu:///system undefine p1_server --remove-all-storage 2>/dev/null || true
 	sudo virsh -c qemu:///system undefine p1_worker --remove-all-storage 2>/dev/null || true
+	rm -rf .vagrant
 
-rm -rf .vagrant
 
 re: rl provision
 
