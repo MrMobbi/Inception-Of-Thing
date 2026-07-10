@@ -26,7 +26,7 @@ st:
 	vagrant status
 
 ssh:
-	vagrant ssh-server
+	vagrant ssh server
 
 logs:
 	vagrant ssh-server -c "sudo journalctl -u k3s -f"

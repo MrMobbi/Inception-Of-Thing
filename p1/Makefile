@@ -40,16 +40,16 @@ st:
 	vagrant status
 
 ssh-server:
-	vagrant ssh-server
+	vagrant ssh server
 
 ssh-worker:
-	vagrant ssh-worker
+	vagrant ssh worker
 
 logs-server:
-	vagrant ssh-server -c "sudo journalctl -u k3s -f"
+	vagrant ssh server -c "sudo journalctl -u k3s -f"
 
 logs-worker:
-	vagrant ssh-worker -c "sudo journalctl -u k3s -f"
+	vagrant ssh worker -c "sudo journalctl -u k3s -f"
 
 .PHONY: up \
 		provision \
