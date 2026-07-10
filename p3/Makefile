@@ -6,6 +6,8 @@ YELLOW := \033[0;33m
 BLUE   := \033[0;34m
 RESET  := \033[0m
 
+export KUBECONFIG := $(CURDIR)/config/config
+
 # Message function
 define msg
 	@printf	"$(1)#######################\n"
@@ -17,23 +19,27 @@ all: install create build
 
 install:
 	$(call msg, $(GREEN),Installing requirement)
-	bash scripts/install.sh
+	bash scripts/install_arch.sh
 
 create:
-	$(call msg, $(GREEN),Building project)
-	k3d cluster create inception-of-things -p 8080:80@loadbalancer
-	mkdir config
+	$(call msg,$(GREEN),Building project)
+	mkdir -p config
+	k3d cluster create inception-of-things \
+		--api-port "127.0.0.1:6550" \
+		-p "8080:80@loadbalancer"
 	k3d kubeconfig get inception-of-things > config/config
+	k3d kubeconfig get inception-of-things > ~/.kube/config
+	sed -i 's#https://0\.0\.0\.0:#https://127.0.0.1:#' config/config
 
 build: build-common build-argocd 
 
 build-common:
 	$(call msg, $(GREEN),Building default cluster)
-	bash scripts/common.sh
+	bash scripts/common_arch.sh
 
 build-argocd:
 	$(call msg, $(GREEN),Building argoCD)
-	bash scripts/argocd.sh
+	bash scripts/argocd_arch.sh
 
 build-app:
 	$(call msg, $(GREEN),Building app)
@@ -61,7 +67,7 @@ get-argocd-pwd:
 clean:
 	$(call msg, $(RED),Deleting cluster)
 	k3d cluster delete inception-of-things
-	rm config/config
+	rm -f config/config
 
 re: clean all
 

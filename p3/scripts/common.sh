@@ -8,7 +8,7 @@ RESET='\e[0m'
 
 
 #set -e
-set -o pipe
+set -o pipefail
 
 echo -e "${BLUE}=== Creation of the namespace ===${RESET}"
 kubectl create namespace argocd
