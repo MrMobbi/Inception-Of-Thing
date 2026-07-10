@@ -22,6 +22,7 @@ install:
 create:
 	$(call msg, $(GREEN),Building project)
 	k3d cluster create inception-of-things -p 8080:80@loadbalancer
+	mkdir config
 	k3d kubeconfig get inception-of-things > config/config
 
 build: build-common build-argocd 
